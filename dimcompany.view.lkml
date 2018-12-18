@@ -11,17 +11,19 @@ view: dimcompany {
     type: number
     sql: ${TABLE}.CompanyKey ;;
   }
+
+
+  dimension: company_name {
+    type: string
+    sql: ${TABLE}.Company_Name ;;
+    order_by_field: company_key
+  }
+
   dimension: company_key_4_sort {
     hidden: yes
     type: number
     sql: -${TABLE}.CompanyKey ;;
   }
-
-  dimension: company_name {
-    type: string
-    sql: ${TABLE}.Company_Name ;;
-  }
-
   dimension: company_name_rev {
     type: string
     sql: ${TABLE}.Company_Name ;;
