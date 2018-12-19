@@ -1,7 +1,13 @@
 view: dimcompany {
   sql_table_name: looker.dimcompany ;;
 
+
   dimension: company_bkey {
+    type: string
+    sql: ${TABLE}.CompanyBKey ;;
+  }
+
+  dimension: company_bkey2 {
     type: string
     sql: ${TABLE}.CompanyBKey ;;
   }
