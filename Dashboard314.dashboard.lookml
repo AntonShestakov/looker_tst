@@ -5,7 +5,7 @@
   elements:
   - title: Untitled
     name: Untitled
-    model: pg_test_model
+    model: pg_test_model_DEV
     explore: factvenue
     type: table
     fields:
