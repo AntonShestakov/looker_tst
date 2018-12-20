@@ -1,82 +1,138 @@
 view: factvenue {
   sql_table_name: looker.factvenue ;;
 
-  dimension: companykey {
+  dimension: company_key {
+    hidden: yes
     type: number
-    sql: ${TABLE}.companykey ;;
+    sql: ${TABLE}.CompanyKey ;;
   }
 
-  dimension: issceduled {
+  dimension: is_sceduled {
     type: yesno
-    sql: ${TABLE}.issceduled ;;
+    sql: ${TABLE}.IsSceduled ;;
   }
 
-  dimension: networkvenuekey {
+  dimension: network_venue_key {
+    hidden: yes
     type: number
-    sql: ${TABLE}.networkvenuekey ;;
+    sql: ${TABLE}.NetworkVenueKey ;;
   }
 
-  dimension: parentproposalkey {
+  dimension: parent_proposal_key {
+    hidden: yes
     type: number
-    sql: ${TABLE}.parentproposalkey ;;
+    sql: ${TABLE}.ParentProposalKey ;;
   }
 
-  dimension: productdurationkey {
+  dimension: product_duration_key {
+    hidden: yes
     type: number
-    sql: ${TABLE}.productdurationkey ;;
+    sql: ${TABLE}.ProductDurationKey ;;
   }
 
-  dimension: proposalkey {
+  dimension: proposal_key {
+    hidden: yes
     type: number
-    sql: ${TABLE}.proposalkey ;;
+    sql: ${TABLE}.ProposalKey ;;
   }
 
-  dimension: salesvenuekey {
+  dimension: sales_venue_key {
+    hidden: yes
     type: number
-    sql: ${TABLE}.salesvenuekey ;;
+    sql: ${TABLE}.SalesVenueKey ;;
   }
 
-  dimension: scheduleddurationseconds {
+  dimension: schedule_key {
+    hidden: yes
     type: number
-    sql: ${TABLE}.scheduleddurationseconds ;;
+    sql: ${TABLE}.ScheduleKey ;;
   }
 
-  dimension: scheduledtimes {
+  measure: scheduled_duration_seconds {
+    type: sum
+    sql: ${TABLE}.ScheduledDurationSeconds ;;
+  }
+
+  measure: scheduled_times {
+    type: sum
+    sql: ${TABLE}.ScheduledTimes ;;
+  }
+
+  dimension: server_venue_key {
+    hidden: yes
     type: number
-    sql: ${TABLE}.scheduledtimes ;;
+    sql: ${TABLE}.ServerVenueKey ;;
   }
 
-  dimension: schedulekey {
+  measure: shown_diration_seconds {
+    type: sum
+    sql: ${TABLE}.ShownDirationSeconds ;;
+  }
+
+  measure: shown_times {
+    type: sum
+    view_label: ""
+    label: "Shown Time (lable)"
+    drill_fields: [detail*]
+    sql: ${TABLE}.ShownTimes ;;
+  }
+
+  measure: fullfilment {
     type: number
-    sql: ${TABLE}.schedulekey ;;
+    value_format_name: percent_2
+    sql: 1.0 * ${shown_times}/ NULLIF(${scheduled_times},0) ;;
   }
 
-  dimension: servervenuekey {
+  measure: fullfilment_delta {
     type: number
-    sql: ${TABLE}.servervenuekey ;;
+    value_format_name: percent_2
+    sql: ${fullfilment} - 1.0 ;;
   }
 
-  dimension: showndirationseconds {
+  measure: fullfilment_rgb {
     type: number
-    sql: ${TABLE}.showndirationseconds ;;
+    value_format_name: percent_2
+    sql: round(255 * ${shown_times}/ NULLIF(${scheduled_times},0)) ;;
   }
 
-  dimension: showntimes {
+  measure: fullfilment_html {
     type: number
-    sql: ${TABLE}.showntimes ;;
+    value_format_name: percent_2
+    sql: 1.0 * ${shown_times}/ NULLIF(${scheduled_times},0);;
+    html:  <table width="100%"><tr>
+          <td style="background-color: rgb({{ $factvenue.fullfilment_rgb }},128,{{ $factvenue.fullfilment_rgb }}); font-size:100%;
+          color: black">
+          {{ value }} </td>
+          </tr></table> ;;
   }
-
-  dimension: teritoryvenuekey {
+  measure: fullfilment_html2 {
     type: number
-    sql: ${TABLE}.teritoryvenuekey ;;
+    value_format_name: percent_2
+    sql: 1.0 * ${shown_times}/ NULLIF(${scheduled_times},0);;
+    html:  <table width="100%"><tr>
+          <td style="background-color: rgb({{ $factvenue.fullfilment_rgb }},128,{{ $factvenue.fullfilment_rgb }}); font-size:100%;
+          color: black">
+          {{ value }} </td>
+          </tr></table> ;;
   }
 
-  dimension: venuebkey {
+  set: detail {
+    fields: [scheduled_times, shown_times, fullfilment, dimcompany.company_name, dimproposal.proposal_number, dimteritoryvenue.name, dimsalesvenue.venue_name]
+  }
+
+
+
+  dimension: teritory_venue_key {
+    type: number
+    sql: ${TABLE}.TeritoryVenueKey ;;
+  }
+
+  dimension: venue_bkey {
     type: string
-    sql: ${TABLE}.venuebkey ;;
+    sql: ${TABLE}.VenueBKey ;;
   }
 
-  dimension_group: venuedate {
+  dimension_group: venue {
     type: time
     timeframes: [
       raw,
@@ -88,15 +144,15 @@ view: factvenue {
     ]
     convert_tz: no
     datatype: date
-    sql: ${TABLE}.venuedate ;;
+    sql: ${TABLE}.VenueDate ;;
   }
 
-  dimension: venuekey {
+  dimension: venue_key {
     type: number
-    sql: ${TABLE}.venuekey ;;
+    sql: ${TABLE}.VenueKey ;;
   }
 
-  dimension: worklistvenuekey {
+  dimension: worklist_venue_key {
     type: number
     sql: ${TABLE}.worklistvenuekey ;;
   }
