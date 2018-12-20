@@ -1,5 +1,5 @@
 connection: "postgres_test"
-label: "Test QAT"
+label: "Test DEV"
 include: "*.dashboard.lookml"
 
 include: "*.view.lkml"
